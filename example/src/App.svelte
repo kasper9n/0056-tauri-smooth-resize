@@ -2,9 +2,9 @@
   import { resize } from 'tauri-smooth-resize/src/index'
 </script>
 
-<h1>Svelte Smooth Resize</h1>
-<button on:click={() => resize(800, 600)}>Smaller</button>
-<button on:click={() => resize(1000, 800)}>Bigger</button>
+<h1>Tauri Smooth Resize</h1>
+<button on:click={() => resize(400, 300)}>Smaller</button>
+<button on:click={() => resize(500, 400)}>Bigger</button>
 
 <style lang="sass">
   :global(body)

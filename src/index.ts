@@ -1,8 +1,13 @@
-import { window } from '@tauri-apps/api'
-import { PhysicalSize } from '@tauri-apps/api/window'
+import { LogicalSize, PhysicalSize, WebviewWindow, getCurrent } from '@tauri-apps/api/window'
 
 function cubicInOut(t: number) {
   return t < 0.5 ? 4 * t * t * t : 0.5 * Math.pow(2 * t - 2, 3) + 1
+}
+
+async function logicalInnerSize(win: WebviewWindow): Promise<LogicalSize> {
+  const innerSize = await win.innerSize()
+  let physicalSize = new PhysicalSize(innerSize.width, innerSize.height)
+  return physicalSize.toLogical(await win.scaleFactor())
 }
 
 type Options = {
@@ -26,27 +31,28 @@ export async function resize(width: number, height: number, options: Options = d
   const finalHeight = height
   const duration = options.duration || defaultOptions.duration
   const easingFn = options.easingFn || defaultOptions.easingFn
-  const win = window.getCurrent()
+  const win = getCurrent()
 
   if (await win.isFullscreen()) {
     return
   }
 
-  const startSize = await win.innerSize()
+  const startSize = await logicalInnerSize(win)
   const widthDelta = finalWidth - startSize.width
   const heightDelta = finalHeight - startSize.height
   const startTime = Date.now()
+  console.log(startSize.width, startSize.height, startSize.type)
 
   async function step() {
     const progress = (Date.now() - startTime) / duration
     if (progress >= 1) {
-      win.setSize(new PhysicalSize(finalWidth, finalHeight))
+      win.setSize(new LogicalSize(finalWidth, finalHeight))
       return true
     } else {
       const completion = easingFn(progress)
       const stepWidth = Math.round(startSize.width + widthDelta * completion)
       const stepHeight = Math.round(startSize.height + heightDelta * completion)
-      await win.setSize(new PhysicalSize(stepWidth, stepHeight))
+      await win.setSize(new LogicalSize(stepWidth, stepHeight))
       return false
     }
   }
