@@ -4,14 +4,9 @@
 )]
 
 use tauri::api::shell;
-use tauri::{CustomMenuItem, Submenu, WindowBuilder, WindowUrl};
+use tauri::{Submenu, WindowBuilder, WindowUrl};
 
 mod menu;
-
-fn custom_item(name: &str) -> CustomMenuItem {
-  let c = CustomMenuItem::new(name.to_string(), name);
-  return c;
-}
 
 fn main() {
   let ctx = tauri::generate_context!();
@@ -38,10 +33,7 @@ fn main() {
       menu::default_edit_submenu(),
       menu::default_view_submenu(),
       menu::default_window_submenu(),
-      menu::Item::Submenu(Submenu::new(
-        "Help",
-        menu::new(vec![menu::Item::Custom(custom_item("Learn More"))]),
-      )),
+      menu::Item::Submenu(Submenu::new("Help", menu::new(vec![]))),
     ]))
     .on_menu_event(|event| {
       let event_name = event.menu_item_id();
