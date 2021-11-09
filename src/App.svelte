@@ -2,16 +2,23 @@
   import { window } from '@tauri-apps/api'
   import { PhysicalSize } from '@tauri-apps/api/window'
 
+  function cubicInOut(t: number) {
+    return t < 0.5 ? 4 * t * t * t : 0.5 * Math.pow(2 * t - 2, 3) + 1
+  }
+
   type Options = {
     duration?: number
+    easingFn?: (time: number) => number
   }
   const defaultOptions = {
     duration: 400,
+    easingFn: cubicInOut,
   }
   async function resize(width: number, height: number, options: Options = defaultOptions) {
     const finalWidth = width
     const finalHeight = height
     const duration = options.duration || defaultOptions.duration
+    const easingFn = options.easingFn || defaultOptions.easingFn
     const win = window.getCurrent()
 
     const isFullScreen = await win.isFullscreen()
@@ -30,8 +37,9 @@
         win.setSize(new PhysicalSize(finalWidth, finalHeight))
         return true
       } else {
-        let stepWidth = Math.round(startSize.width + widthDelta * progress)
-        let stepHeight = Math.round(startSize.height + heightDelta * progress)
+        let completion = easingFn(progress)
+        let stepWidth = Math.round(startSize.width + widthDelta * completion)
+        let stepHeight = Math.round(startSize.height + heightDelta * completion)
         await win.setSize(new PhysicalSize(stepWidth, stepHeight))
         return false
       }
