@@ -4,16 +4,10 @@
     "module": "esnext",
     "moduleResolution": "node",
 
-    // require `import type` instead fo `import` for types
-    // svelte-preprocess apparently needs this
-    "importsNotUsedAsValues": "error",
     "isolatedModules": true,
 
-    // To have svelte warnings/errors correct position
-    "sourceMap": true,
-
     // Prevent type errors
-    "types": ["svelte"],
+    "types": [],
 
     "strict": true,
     "esModuleInterop": true,
@@ -21,5 +15,5 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "."
   },
-  "include": ["src/**/*.ts", "src/**/*.svelte"]
+  "include": ["src/**/*.ts"]
 }

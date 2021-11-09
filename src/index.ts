@@ -5,9 +5,41 @@ function cubicInOut(t: number) {
 }
 
 async function logicalInnerSize(win: WebviewWindow): Promise<LogicalSize> {
+  // .toLogical() isn't available from win.innerSize() even though the
+  // specified return type is PhysicalSize
   const innerSize = await win.innerSize()
   let physicalSize = new PhysicalSize(innerSize.width, innerSize.height)
   return physicalSize.toLogical(await win.scaleFactor())
+}
+
+/**
+ * Calls the callback every animation frame, unless the last callback has not
+ * yet returned.
+ *
+ * The function returns when the interval is cancelled.
+ */
+async function animationInterval(callback: (cancel: () => void) => Promise<void>) {
+  let inProgress = false
+  let done = false
+  function cancel() {
+    done = true
+  }
+  let interval = new Promise((resolve, reject) => {
+    async function tick() {
+      if (done) {
+        resolve(null)
+      } else if (inProgress) {
+        requestAnimationFrame(tick)
+      } else {
+        inProgress = true
+        requestAnimationFrame(tick)
+        await callback(cancel)
+        inProgress = false
+      }
+    }
+    tick()
+  })
+  await interval
 }
 
 type Options = {
@@ -41,32 +73,17 @@ export async function resize(width: number, height: number, options: Options = d
   const widthDelta = finalWidth - startSize.width
   const heightDelta = finalHeight - startSize.height
   const startTime = Date.now()
-  console.log(startSize.width, startSize.height, startSize.type)
 
-  async function step() {
+  await animationInterval(async (cancel) => {
     const progress = (Date.now() - startTime) / duration
     if (progress >= 1) {
-      win.setSize(new LogicalSize(finalWidth, finalHeight))
-      return true
+      await win.setSize(new LogicalSize(finalWidth, finalHeight))
+      cancel()
     } else {
       const completion = easingFn(progress)
       const stepWidth = Math.round(startSize.width + widthDelta * completion)
       const stepHeight = Math.round(startSize.height + heightDelta * completion)
       await win.setSize(new LogicalSize(stepWidth, stepHeight))
-      return false
     }
-  }
-  let stepInProgress = false
-  let done = false
-  async function frame() {
-    if (!done && stepInProgress) {
-      requestAnimationFrame(frame)
-    } else if (!done) {
-      stepInProgress = true
-      requestAnimationFrame(frame)
-      done = await step()
-      stepInProgress = false
-    }
-  }
-  frame()
+  })
 }

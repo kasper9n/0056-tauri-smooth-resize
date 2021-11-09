@@ -22,4 +22,4 @@ tauri = { git = "https://github.com/tauri-apps/tauri", rev = "f8b98ed", features
 
 ### Commands
 
-- `npm run lint`: Lin
+- `npm run lint`: Lint
