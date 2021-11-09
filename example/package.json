@@ -7,8 +7,8 @@
     "build": "tauri build",
     "build:web": "vite build",
     "preview": "vite preview",
-    "lint": "prettier --check *.js *.json src",
-    "format": "prettier --write *.js *.json src"
+    "lint": "prettier src *.js && eslint src *.js",
+    "format": "prettier --write src *.js example && eslint --fix src *.js example"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "1.0.0-next.30",
@@ -22,8 +22,9 @@
     "prettier": "^2.4.1",
     "prettier-plugin-svelte": "^2.4.0",
     "sass": "^1.43.3",
-    "svelte": "^3.44.0",
+    "svelte": "^3.44.1",
     "svelte-preprocess": "^4.9.8",
+    "tauri-smooth-resize": "file:..",
     "typescript": "^4.4.4",
     "vite": "^2.6.11"
   },

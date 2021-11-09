@@ -1,0 +1,26 @@
+{
+  "name": "tauri-smooth-resize",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "prettier src --check && eslint src",
+    "format": "prettier --write src && eslint --fix src"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.4.1",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.0.0-beta.8"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true,
+    "htmlWhitespaceSensitivity": "strict"
+  }
+}
