@@ -21,8 +21,7 @@
     const easingFn = options.easingFn || defaultOptions.easingFn
     const win = window.getCurrent()
 
-    const isFullScreen = await win.isFullscreen()
-    if (isFullScreen) {
+    if (await win.isFullscreen()) {
       return
     }
 
@@ -47,11 +46,9 @@
     let stepInProgress = false
     let done = false
     async function frame() {
-      if (done) {
-        return
-      } else if (stepInProgress) {
+      if (!done && stepInProgress) {
         requestAnimationFrame(frame)
-      } else {
+      } else if (!done) {
         stepInProgress = true
         requestAnimationFrame(frame)
         done = await step()
