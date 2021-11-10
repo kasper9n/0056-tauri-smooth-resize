@@ -1,4 +1,4 @@
-import { invoke, process } from '@tauri-apps/api'
+import { invoke } from '@tauri-apps/api'
 import { assert } from 'chai'
 // import { resize } from 'tauri-smooth-resize/src/index'
 

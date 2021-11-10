@@ -2,7 +2,10 @@
   "name": "tauri-smooth-resize",
   "version": "0.0.0",
   "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc --outDir dist --declaration",
     "lint": "prettier --check src && eslint src",
     "format": "prettier --write src && eslint --fix src"
   },
