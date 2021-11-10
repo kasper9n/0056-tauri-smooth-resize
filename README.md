@@ -2,6 +2,8 @@
 
 ## Usage
 ```
+import { resize } from 'tauri-smooth-resize'
+resize(600, 400)
 ```
 
 ## Tauri `window.innerSize()` bug
@@ -28,3 +30,4 @@ tauri = { git = "https://github.com/tauri-apps/tauri", rev = "f8b98ed", features
 
 - `npm run build`: Builds `src/index.ts` to `./build`
 - `npm run lint`: Lint
+- `npm run test`: Run tests from `example/tests`
