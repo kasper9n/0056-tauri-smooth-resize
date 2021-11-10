@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "Tauri Template"
+    "productName": "Tauri Smooth Resize"
   },
   "build": {
     "distDir": "../build",
@@ -17,17 +17,13 @@
         "appimage",
         "msi"
       ],
-      "identifier": "com.example.tauri-template",
+      "identifier": "com.example.tauri-smooth-resize-example",
       "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
+        "icon.png"
       ],
       "resources": [],
       "externalBin": [],
-      "copyright": "© 2021 kasper.space",
+      "copyright": "",
       "category": "DeveloperTool",
       "shortDescription": "",
       "longDescription": "",
@@ -55,6 +51,7 @@
     "allowlist": {
       "all": true
     },
+    "windows": [],
     "security": {
       "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
     }

@@ -8,7 +8,7 @@ async function logicalInnerSize(win: WebviewWindow): Promise<LogicalSize> {
   // .toLogical() isn't available from win.innerSize() even though the
   // specified return type is PhysicalSize
   const innerSize = await win.innerSize()
-  let physicalSize = new PhysicalSize(innerSize.width, innerSize.height)
+  const physicalSize = new PhysicalSize(innerSize.width, innerSize.height)
   return physicalSize.toLogical(await win.scaleFactor())
 }
 
@@ -24,7 +24,7 @@ async function animationInterval(callback: (cancel: () => void) => Promise<void>
   function cancel() {
     done = true
   }
-  let interval = new Promise((resolve, reject) => {
+  const interval = new Promise((resolve) => {
     async function tick() {
       if (done) {
         resolve(null)
