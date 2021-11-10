@@ -3,19 +3,33 @@
   windows_subsystem = "windows"
 )]
 
-use tauri::api::shell;
-use tauri::{Submenu, WindowBuilder, WindowUrl};
+use std::env;
+use tauri::{command, WindowBuilder, WindowUrl};
 
-mod menu;
+#[command]
+fn handle_error(msg: String) {
+  eprintln!("{}", msg);
+  std::process::exit(1);
+}
+#[command]
+fn finish(msg: String) {
+  println!("{}", msg);
+  std::process::exit(0);
+}
+
+#[command]
+fn is_test_env() -> bool {
+  env::var("TEST_ENV").is_ok()
+}
 
 fn main() {
   let ctx = tauri::generate_context!();
 
   tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![])
+    .invoke_handler(tauri::generate_handler![is_test_env, handle_error, finish])
     .create_window("main", WindowUrl::default(), |win, webview| {
       let win = win
-        .title("Tauri Template")
+        .title("Tauri Smooth Resize")
         .resizable(true)
         .transparent(false)
         .decorations(true)
@@ -25,28 +39,6 @@ fn main() {
         .skip_taskbar(false)
         .fullscreen(false);
       return (win, webview);
-    })
-    .menu(menu::new(vec![
-      #[cfg(target_os = "macos")]
-      menu::default_app_submenu(&ctx.package_info().name),
-      menu::default_file_submenu(),
-      menu::default_edit_submenu(),
-      menu::default_view_submenu(),
-      menu::default_window_submenu(),
-      menu::Item::Submenu(Submenu::new("Help", menu::new(vec![]))),
-    ]))
-    .on_menu_event(|event| {
-      let event_name = event.menu_item_id();
-      match event_name {
-        "Learn More" => {
-          shell::open(
-            "https://github.com/probablykasper/tauri-template".to_string(),
-            None,
-          )
-          .unwrap();
-        }
-        _ => {}
-      }
     })
     .run(ctx)
     .expect("error while running tauri application");

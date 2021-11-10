@@ -1,8 +1,20 @@
 <script lang="ts">
   import { resize } from 'tauri-smooth-resize/src/index'
+  import { isTestEnv, runTests } from '../tests/test'
+
+  let testEnv = false
+  isTestEnv().then(async (isTestEnv) => {
+    if (isTestEnv) {
+      testEnv = true
+      await runTests()
+    }
+  })
 </script>
 
 <h1>Tauri Smooth Resize</h1>
+{#if testEnv}
+  Currently in test environment
+{/if}
 <button on:click={() => resize(400, 300)}>Smaller</button>
 <button on:click={() => resize(500, 400)}>Bigger</button>
 
